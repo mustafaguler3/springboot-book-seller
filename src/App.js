@@ -1,24 +1,43 @@
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Navbar from './components/navbar';
+import {BrowserRouter,Route,Routes} from "react-router-dom"
+import Home from "./pages/home/home.page"
+import Login from "./pages/login/login.page"
+import Register from "./pages/register/register.page"
+import Profile from "./pages/profile/profile.page"
+import Admin from "./pages/admin/admin.page"
+import NotFound from "./pages/not-found/notfound.page"
+import UnAuthorized from "./pages/unauthorized/unauthorized.page"
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <BrowserRouter>
+        <Navbar />
+        <Routes>
+        <div className='container'>
+          <Route path="/" component={Home}/>
+          <Route path="/home" element={<Home/>}/>
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/register" element={<Register/>}/>
+
+          <Route path="/profile" element={
+            <AuthGuard roles={[Role.ADMIN,Role.USER]}>
+                <Profile/>
+            </AuthGuard>
+          }/>
+          
+          <Route path="/admin" element={<Admin/>}/>
+          <Route path="/404" element={<NotFound/>}/>
+          <Route path="/401" element={<UnAuthorized/>}/>
+        </div>
+        </Routes>
+        
+    </BrowserRouter>
+      
+    </>
   );
 }
 
